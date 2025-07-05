@@ -1,0 +1,7 @@
+com\ecommerce\order\model\BuyOneGetOnePromotion.class
+com\ecommerce\order\model\FinalOrderItem.class
+com\ecommerce\order\model\OrderItem.class
+com\ecommerce\order\service\OrderService.class
+com\ecommerce\order\model\ThresholdDiscountPromotion.class
+com\ecommerce\order\model\Order.class
+com\ecommerce\order\model\Product.class
