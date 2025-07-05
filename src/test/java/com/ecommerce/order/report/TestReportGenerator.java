@@ -43,45 +43,61 @@ public class TestReportGenerator {
     }
     
     private static TestResults parseTestResults() throws Exception {
-        File xmlFile = new File("target/surefire-reports/TEST-com.ecommerce.order.OrderPricingCucumberTest.xml");
+        // 讀取所有測試結果文件
+        File surefireDir = new File("target/surefire-reports");
+        if (!surefireDir.exists()) {
+            throw new RuntimeException("測試報告目錄不存在: " + surefireDir.getAbsolutePath());
+        }
         
-        if (!xmlFile.exists()) {
-            throw new RuntimeException("測試報告檔案不存在: " + xmlFile.getAbsolutePath());
+        TestResults aggregatedResults = new TestResults();
+        
+        // 查找所有 TEST-*.xml 文件
+        File[] xmlFiles = surefireDir.listFiles((dir, name) -> 
+            name.startsWith("TEST-") && name.endsWith(".xml"));
+            
+        if (xmlFiles == null || xmlFiles.length == 0) {
+            throw new RuntimeException("找不到測試報告文件");
         }
         
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(xmlFile);
         
-        Element testSuite = document.getDocumentElement();
-        
-        TestResults results = new TestResults();
-        results.totalTests = Integer.parseInt(testSuite.getAttribute("tests"));
-        results.failures = Integer.parseInt(testSuite.getAttribute("failures"));
-        results.errors = Integer.parseInt(testSuite.getAttribute("errors"));
-        results.skipped = Integer.parseInt(testSuite.getAttribute("skipped"));
-        results.time = Double.parseDouble(testSuite.getAttribute("time"));
-        results.passed = results.totalTests - results.failures - results.errors - results.skipped;
-        
-        NodeList testCases = testSuite.getElementsByTagName("testcase");
-        for (int i = 0; i < testCases.getLength(); i++) {
-            Element testCase = (Element) testCases.item(i);
-            TestCase tc = new TestCase();
-            tc.name = testCase.getAttribute("name");
-            tc.className = testCase.getAttribute("classname");
-            tc.time = Double.parseDouble(testCase.getAttribute("time"));
-            tc.status = "PASSED"; // 預設為通過，如果有 failure 或 error 元素則修改
+        // 聚合所有測試結果
+        for (File xmlFile : xmlFiles) {
+            Document document = builder.parse(xmlFile);
+            Element testSuite = document.getDocumentElement();
             
-            if (testCase.getElementsByTagName("failure").getLength() > 0) {
-                tc.status = "FAILED";
-            } else if (testCase.getElementsByTagName("error").getLength() > 0) {
-                tc.status = "ERROR";
+            // 累加測試統計
+            aggregatedResults.totalTests += Integer.parseInt(testSuite.getAttribute("tests"));
+            aggregatedResults.failures += Integer.parseInt(testSuite.getAttribute("failures"));
+            aggregatedResults.errors += Integer.parseInt(testSuite.getAttribute("errors"));
+            aggregatedResults.skipped += Integer.parseInt(testSuite.getAttribute("skipped"));
+            aggregatedResults.time += Double.parseDouble(testSuite.getAttribute("time"));
+            
+            // 處理測試案例
+            NodeList testCases = testSuite.getElementsByTagName("testcase");
+            for (int i = 0; i < testCases.getLength(); i++) {
+                Element testCase = (Element) testCases.item(i);
+                TestCase tc = new TestCase();
+                tc.name = testCase.getAttribute("name");
+                tc.className = testCase.getAttribute("classname");
+                tc.time = Double.parseDouble(testCase.getAttribute("time"));
+                tc.status = "PASSED"; // 預設為通過
+                
+                if (testCase.getElementsByTagName("failure").getLength() > 0) {
+                    tc.status = "FAILED";
+                } else if (testCase.getElementsByTagName("error").getLength() > 0) {
+                    tc.status = "ERROR";
+                }
+                
+                aggregatedResults.testCases.add(tc);
             }
-            
-            results.testCases.add(tc);
         }
         
-        return results;
+        // 計算通過的測試數量
+        aggregatedResults.passed = aggregatedResults.totalTests - aggregatedResults.failures - aggregatedResults.errors - aggregatedResults.skipped;
+        
+        return aggregatedResults;
     }
     
     private static String generateHTML(TestResults results) {
@@ -432,13 +448,21 @@ public class TestReportGenerator {
     
     private static String getScenarioDescription(String name) {
         return switch (name) {
+            // Order Pricing Scenarios
             case "Single product without promotions" -> "測試單一商品無促銷活動的基本訂單處理邏輯";
             case "Threshold discount applies when subtotal reaches 1000" -> "驗證滿額折扣促銷活動在達到門檻時正確計算折扣";
             case "Buy-one-get-one for cosmetics - multiple products" -> "測試化妝品類別的買一送一促銷活動，涵蓋多種商品";
             case "Buy-one-get-one for cosmetics - same product twice" -> "驗證同一化妝品商品購買多個時的買一送一邏輯";
             case "Buy-one-get-one for cosmetics - mixed categories" -> "測試混合商品類別時，僅化妝品享有買一送一優惠";
             case "Multiple promotions stacked" -> "驗證多重促銷活動同時生效時的正確計算邏輯";
-            default -> "BDD 測試案例";
+            
+            // Double 11 Scenarios
+            case "購買 12 件襪子 - 一組享有折扣，剩餘按原價" -> "測試雙十一優惠：12件商品，10件享20%折扣，2件原價 (10×100×80% + 2×100 = 1000)";
+            case "購買 27 件襪子 - 兩組享有折扣，剩餘按原價" -> "測試雙十一優惠：27件商品，20件享20%折扣，7件原價 (2組×10×100×80% + 7×100 = 2300)";
+            case "購買 10 件不同商品 - 無折扣因為非同一種商品" -> "測試雙十一優惠：10種不同商品各1件，無折扣（需同種商品才享折扣）";
+            
+            // Default
+            default -> "BDD 測試案例 - " + name;
         };
     }
     

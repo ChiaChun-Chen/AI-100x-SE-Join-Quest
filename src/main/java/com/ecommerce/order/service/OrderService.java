@@ -8,6 +8,7 @@ public class OrderService {
     
     private ThresholdDiscountPromotion thresholdDiscountPromotion;
     private BuyOneGetOnePromotion buyOneGetOnePromotion;
+    private Double11Promotion double11Promotion;
     
     public void setThresholdDiscountPromotion(ThresholdDiscountPromotion promotion) {
         this.thresholdDiscountPromotion = promotion;
@@ -15,6 +16,10 @@ public class OrderService {
     
     public void setBuyOneGetOnePromotion(BuyOneGetOnePromotion promotion) {
         this.buyOneGetOnePromotion = promotion;
+    }
+    
+    public void setDouble11Promotion(Double11Promotion promotion) {
+        this.double11Promotion = promotion;
     }
     
     public Order processOrder(List<OrderItem> items) {
@@ -38,10 +43,14 @@ public class OrderService {
         int originalAmount = calculateOriginalAmount(items);
         order.setOriginalAmount(originalAmount);
         
-        // Apply threshold discount if applicable
+        // Apply discounts - threshold discount and Double11 promotion
         int discount = 0;
         if (thresholdDiscountPromotion != null && thresholdDiscountPromotion.isApplicable(originalAmount)) {
-            discount = thresholdDiscountPromotion.getDiscount();
+            discount += thresholdDiscountPromotion.getDiscount();
+        }
+        
+        if (double11Promotion != null && double11Promotion.isApplicable(items)) {
+            discount += double11Promotion.calculateDiscount(items);
         }
         
         order.setDiscount(discount);

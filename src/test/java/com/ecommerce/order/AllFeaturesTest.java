@@ -7,6 +7,7 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("order.feature")
-public class OrderPricingCucumberTest {
+@SelectClasspathResource("features")
+public class AllFeaturesTest {
+    // 統一執行所有 feature 檔案的測試入口點
 }

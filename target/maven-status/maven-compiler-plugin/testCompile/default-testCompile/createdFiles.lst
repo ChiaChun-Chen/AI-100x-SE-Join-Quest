@@ -1,5 +1,5 @@
-com\ecommerce\order\steps\OrderStepDefinitions.class
-com\ecommerce\order\OrderPricingCucumberTest.class
-com\ecommerce\order\report\TestReportGenerator$TestResults.class
 com\ecommerce\order\report\TestReportGenerator$TestCase.class
 com\ecommerce\order\report\TestReportGenerator.class
+com\ecommerce\order\AllFeaturesTest.class
+com\ecommerce\order\steps\OrderStepDefinitions.class
+com\ecommerce\order\report\TestReportGenerator$TestResults.class

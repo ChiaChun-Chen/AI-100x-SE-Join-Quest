@@ -117,10 +117,10 @@ public class OrderStepDefinitions {
     @Given("the threshold discount promotion is configured:")
     public void theThresholdDiscountPromotionIsConfigured(DataTable dataTable) {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-        Map<String, String> promotionConfig = rows.get(0);
+        Map<String, String> config = rows.get(0);
         
-        int threshold = Integer.parseInt(promotionConfig.get("threshold"));
-        int discount = Integer.parseInt(promotionConfig.get("discount"));
+        int threshold = Integer.parseInt(config.get("threshold"));
+        int discount = Integer.parseInt(config.get("discount"));
         
         ThresholdDiscountPromotion promotion = new ThresholdDiscountPromotion(threshold, discount);
         orderService.setThresholdDiscountPromotion(promotion);
@@ -130,5 +130,11 @@ public class OrderStepDefinitions {
     public void theBuyOneGetOnePromotionForCosmeticsIsActive() {
         BuyOneGetOnePromotion promotion = new BuyOneGetOnePromotion("cosmetics");
         orderService.setBuyOneGetOnePromotion(promotion);
+    }
+
+    @Given("the Double 11 promotion is active with 20% discount for every 10 pieces of same product")
+    public void theDouble11PromotionIsActiveWith20PercentDiscountForEvery10PiecesOfSameProduct() {
+        Double11Promotion promotion = new Double11Promotion();
+        orderService.setDouble11Promotion(promotion);
     }
 }

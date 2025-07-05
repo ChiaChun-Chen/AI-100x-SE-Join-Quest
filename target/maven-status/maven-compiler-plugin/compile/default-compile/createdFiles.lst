@@ -1,3 +1,4 @@
+com\ecommerce\order\model\Double11Promotion.class
 com\ecommerce\order\model\BuyOneGetOnePromotion.class
 com\ecommerce\order\model\FinalOrderItem.class
 com\ecommerce\order\model\OrderItem.class

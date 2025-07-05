@@ -21,4 +21,8 @@ public class FinalOrderItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public String getProductName() {
+        return product.getName();
+    }
 }

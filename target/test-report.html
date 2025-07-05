@@ -232,13 +232,13 @@
     <header>
         <h1>🎯 BDD 測試報告</h1>
         <h2>E-commerce Order Pricing Promotions</h2>
-        <p class="timestamp">報告生成時間: 2025-07-05 16:28:04</p>
+        <p class="timestamp">報告生成時間: 2025-07-05 18:32:46</p>
     </header>
     <div class="container">
         <div class="summary-grid">
             <div class="card passed">
                 <h3>✅ 通過</h3>
-                <p class="number">6</p>
+                <p class="number">9</p>
             </div>
             <div class="card failed">
                 <h3>❌ 失敗</h3>
@@ -250,7 +250,7 @@
             </div>
             <div class="card total">
                 <h3>📊 總計</h3>
-                <p class="number">6</p>
+                <p class="number">9</p>
             </div>
         </div>
         <div class="charts-section">
@@ -269,8 +269,38 @@
                 <div class="test-item passed">
                     <div class="test-header">
                         <span class="status-icon">✅</span>
+                        <span class="test-name">購買 12 件襪子 - 一組享有折扣，剩餘按原價</span>
+                        <span class="test-time">0.308s</span>
+                    </div>
+                    <div class="test-description">
+                        <p>測試雙十一優惠：12件商品，10件享20%折扣，2件原價 (10×100×80% + 2×100 = 1000)</p>
+                    </div>
+                </div>
+                <div class="test-item passed">
+                    <div class="test-header">
+                        <span class="status-icon">✅</span>
+                        <span class="test-name">購買 27 件襪子 - 兩組享有折扣，剩餘按原價</span>
+                        <span class="test-time">0.009s</span>
+                    </div>
+                    <div class="test-description">
+                        <p>測試雙十一優惠：27件商品，20件享20%折扣，7件原價 (2組×10×100×80% + 7×100 = 2300)</p>
+                    </div>
+                </div>
+                <div class="test-item passed">
+                    <div class="test-header">
+                        <span class="status-icon">✅</span>
+                        <span class="test-name">購買 10 件不同商品 - 無折扣因為非同一種商品</span>
+                        <span class="test-time">0.036s</span>
+                    </div>
+                    <div class="test-description">
+                        <p>測試雙十一優惠：10種不同商品各1件，無折扣（需同種商品才享折扣）</p>
+                    </div>
+                </div>
+                <div class="test-item passed">
+                    <div class="test-header">
+                        <span class="status-icon">✅</span>
                         <span class="test-name">Single product without promotions</span>
-                        <span class="test-time">0.158s</span>
+                        <span class="test-time">0.009s</span>
                     </div>
                     <div class="test-description">
                         <p>測試單一商品無促銷活動的基本訂單處理邏輯</p>
@@ -280,7 +310,7 @@
                     <div class="test-header">
                         <span class="status-icon">✅</span>
                         <span class="test-name">Threshold discount applies when subtotal reaches 1000</span>
-                        <span class="test-time">0.008s</span>
+                        <span class="test-time">0.007s</span>
                     </div>
                     <div class="test-description">
                         <p>驗證滿額折扣促銷活動在達到門檻時正確計算折扣</p>
@@ -290,7 +320,7 @@
                     <div class="test-header">
                         <span class="status-icon">✅</span>
                         <span class="test-name">Buy-one-get-one for cosmetics - multiple products</span>
-                        <span class="test-time">0.007s</span>
+                        <span class="test-time">0.008s</span>
                     </div>
                     <div class="test-description">
                         <p>測試化妝品類別的買一送一促銷活動，涵蓋多種商品</p>
@@ -310,7 +340,7 @@
                     <div class="test-header">
                         <span class="status-icon">✅</span>
                         <span class="test-name">Buy-one-get-one for cosmetics - mixed categories</span>
-                        <span class="test-time">0.009s</span>
+                        <span class="test-time">0.005s</span>
                     </div>
                     <div class="test-description">
                         <p>測試混合商品類別時，僅化妝品享有買一送一優惠</p>
@@ -333,11 +363,11 @@
             <div class="perf-grid">
                 <div class="perf-item">
                     <span class="label">總執行時間:</span>
-                    <span class="value">0.540 秒</span>
+                    <span class="value">0.736 秒</span>
                 </div>
                 <div class="perf-item">
                     <span class="label">平均執行時間:</span>
-                    <span class="value">0.090 秒</span>
+                    <span class="value">0.082 秒</span>
                 </div>
                 <div class="perf-item">
                     <span class="label">成功率:</span>
@@ -353,7 +383,7 @@ new Chart(resultsCtx, {
     data: {
         labels: ['通過', '失敗', '錯誤'],
         datasets: [{
-            data: [6, 0, 0],
+            data: [9, 0, 0],
             backgroundColor: ['#27ae60', '#e74c3c', '#f39c12'],
             borderWidth: 2,
             borderColor: '#fff'
@@ -373,10 +403,10 @@ const timeCtx = document.getElementById('timeChart').getContext('2d');
 new Chart(timeCtx, {
     type: 'bar',
     data: {
-        labels: ['案例 1', '案例 2', '案例 3', '案例 4', '案例 5', '案例 6'],
+        labels: ['案例 1', '案例 2', '案例 3', '案例 4', '案例 5', '案例 6', '案例 7', '案例 8', '案例 9'],
         datasets: [{
             label: '執行時間 (秒)',
-            data: [0.158, 0.008, 0.007, 0.009, 0.009, 0.006],
+            data: [0.308, 0.009, 0.036, 0.009, 0.007, 0.008, 0.009, 0.005, 0.006],
             backgroundColor: '#3498db',
             borderColor: '#2980b9',
             borderWidth: 1
