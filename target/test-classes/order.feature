@@ -72,7 +72,6 @@ Feature: E-commerce Order Pricing Promotions
       | Socks       | 1        |
       | Lipstick    | 2        |
 
-  @ignore
   Scenario: Multiple promotions stacked
     Given the threshold discount promotion is configured:
       | threshold | discount |
